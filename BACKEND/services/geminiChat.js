@@ -23,7 +23,7 @@ function cosineSimilarity(vecA, vecB) {
 function getRelevantContext(queryEmbedding, document, topK = 3) {
   if (!document || !document.chunks || document.chunks.length === 0) return [];
 
-  const threshold = 0.80; // 60% similarity threshold
+  const threshold = 0.60; // 60% similarity threshold
 
   const similarities = document.chunks.map((chunk) => {
     // Safety check: ensure embeddings exist before calculating similarity
