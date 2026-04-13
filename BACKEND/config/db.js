@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
 require("dotenv").config();
 
-/**
- * Establishes a connection to MongoDB.
+/*
+  Establishes a connection to MongoDB.
  */
 const connectMongoDB = async () => {
   try {

@@ -6,39 +6,36 @@ dotenv.config();
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 /**
- * Generate embeddings for multiple chunks of text using the official @google/generative-ai SDK.
- * @param {Array<String>} chunksArr - Array of text contents.
- * @returns {Promise<Array<Array<Number>>>} - Array of embeddings.
+ * Generate embeddings (768 dimensions) using correct embedding API
  */
 export const generateEmbeddings = async (chunksArr) => {
   if (!chunksArr || chunksArr.length === 0) return [];
 
   try {
-    const model = genAI.getGenerativeModel({ model: "models/gemini-embedding-001" });
+    console.log("[RAG Pipeline] Embedding Model: -------------------");
 
-    // Gemini API supports batching multiple contents in one request.
-    // We process in batches of 100 to stay safely within possible payload limits.
-    const batchSize = 100;
     const allEmbeddings = [];
 
-    for (let i = 0; i < chunksArr.length; i += batchSize) {
-      const currentBatch = chunksArr.slice(i, i + batchSize);
-      
-      const res = await model.batchEmbedContents({
-        requests: currentBatch.map(text => ({
-          content: { role: 'user', parts: [{ text }] }
-        }))
+    for (const text of chunksArr) {
+      const model = genAI.getGenerativeModel({
+        model: "gemini-embedding-001" // ✅ CORRECT
       });
 
-      if (res.embeddings) {
-        allEmbeddings.push(...res.embeddings.map(e => e.values));
-      }
+      const res = await model.embedContent({
+        content: { parts: [{ text }] }
+      });
+
+      const embedding = res.embedding.values;
+
+      console.log("Embedding dimension:", embedding.length); // MUST BE 768
+
+      allEmbeddings.push(embedding);
     }
 
     return allEmbeddings;
+
   } catch (error) {
-    import('fs').then(fs => fs.default.writeFileSync('error.log', JSON.stringify(error, Object.getOwnPropertyNames(error), 2)));
-    console.error("DEBUG: Embedding Error:", error.message);
+    console.error("[RAG Pipeline] Embedding Error:", error);
     throw new Error(`Failed to generate embeddings: ${error.message}`);
   }
 };
