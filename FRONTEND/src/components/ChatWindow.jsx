@@ -331,16 +331,16 @@ const ChatWindow = ({ chat, onSendMessage, onFileUpload, onSelectExistingDocumen
                     <div key={doc._id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#f5f5f5', padding: '10px', borderRadius: '5px' }}>
                       <span style={{ fontSize: '12px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '140px' }} title={doc.originalName}>{doc.originalName}</span>
                       <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
-                        <button 
+                        {/* <button 
                           onClick={() => handleDownload(doc._id, doc.originalName)}
                           style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#666', padding: '4px', display: 'flex' }}
                           title="Download Document"
                         >
                           <Download size={16} />
-                        </button>
+                        </button> */}
                         <button 
                           onClick={() => handleDeleteDoc(doc._id)}
-                          style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#ef4444', padding: '4px', display: 'flex' }}
+                          style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#666', padding: '4px', display: 'flex' }}
                           title="Delete Document"
                         >
                           <Trash2 size={16} />
